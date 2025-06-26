@@ -19,45 +19,40 @@ const Utils = {
     },
     
     // 格式化文件大小
-    formatFileSize(bytes) {
-        if (bytes === 0) return '0 B';
-        const k = 1024;
-        const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    },
-    
-    // 格式化时间
     formatTime(timestamp) {
         const date = new Date(timestamp);
         const now = new Date();
         const diff = now - date;
         
+        // 明确指定时区选项
+        const timeOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZone: 'Asia/Shanghai' // 明确指定中国时区
+        };
+        
+        const dateTimeOptions = {
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZone: 'Asia/Shanghai'
+        };
+        
         // 如果是今天
         if (diff < 24 * 60 * 60 * 1000 && date.getDate() === now.getDate()) {
-            return date.toLocaleTimeString('zh-CN', {
-                hour: '2-digit',
-                minute: '2-digit'
-            });
+            return date.toLocaleTimeString('zh-CN', timeOptions);
         }
         
         // 如果是昨天
         const yesterday = new Date(now);
         yesterday.setDate(yesterday.getDate() - 1);
         if (date.getDate() === yesterday.getDate()) {
-            return '昨天 ' + date.toLocaleTimeString('zh-CN', {
-                hour: '2-digit',
-                minute: '2-digit'
-            });
+            return '昨天 ' + date.toLocaleTimeString('zh-CN', timeOptions);
         }
         
         // 其他日期
-        return date.toLocaleString('zh-CN', {
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+        return date.toLocaleString('zh-CN', dateTimeOptions);
     },
     
     // 获取文件图标 - 支持MIME类型和文件扩展名
